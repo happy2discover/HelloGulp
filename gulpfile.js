@@ -10,6 +10,8 @@ var cleanCSS = require('gulp-clean-css');
 
 var runSequence = require('run-sequence');
 
+var del = require('del');
+
 gulp.task('index', function () {
   var target = gulp.src('./src/index.html');
   // It's not necessary to read the files (will speed up things), we're only after their paths: 
@@ -19,8 +21,16 @@ gulp.task('index', function () {
     .pipe(gulp.dest('./src'));
 });
 
-gulp.task('default', function() {
-  console.log('This is default task');
+gulp.task('clean', function() {
+  del(['./build/**/*']).then(paths => {
+    // console.log('deleted file(s) and forlder(s):');
+    // if(0 === paths.length) {
+    //   console.log('NONE!');
+    // }
+    // else {
+    //   console.log(paths.join('\n'));      
+    // }
+  });
 });
 
 gulp.task('copy-html', function () {
@@ -43,7 +53,7 @@ gulp.task('copy-css', function () {
     .pipe(gulp.dest('./build/css'));
 });
 
-var develeopTasks = ['copy-html', 'copy-js', 'copy-lib', 'copy-css'];
+var develeopTasks = ['clean', 'copy-html', 'copy-js', 'copy-lib', 'copy-css'];
 
 gulp.task('build', function() {
   runSequence(develeopTasks)
