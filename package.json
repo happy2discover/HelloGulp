@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "a project for learning Gulp",
   "main": "gulpfile.js",
+  "scripts": {
+    "test": "gulp build"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/happy2discover/HelloGulp.git"
