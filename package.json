@@ -20,7 +20,6 @@
   },
   "homepage": "https://github.com/happy2discover/HelloGulp#readme",
   "devDependencies": {
-    "event-stream": "^3.3.4",
     "gulp": "^3.9.1",
     "gulp-clean-css": "^2.0.13",
     "gulp-concat": "^2.6.0",

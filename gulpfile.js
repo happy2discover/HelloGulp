@@ -1,10 +1,6 @@
 var gulp = require('gulp');
 
-var through = require('through2');
-
 var inject = require('gulp-inject');
-
-var es = require('event-stream');
 
 var concat = require('gulp-concat');
 
@@ -21,16 +17,6 @@ gulp.task('index', function () {
  
   return target.pipe(inject(sources, {relative: true}))
     .pipe(gulp.dest('./src'));
-});
-
-gulp.task('file-list',function(){
-  return gulp.src('./src/**/*.js')
-    .pipe(through.obj(function(file,enc,cb){
-      console.log(file.relative);
-      // console.log(file.path);
-      this.push(file);
-      cb();
-    }))
 });
 
 gulp.task('default', function() {
