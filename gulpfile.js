@@ -9,7 +9,7 @@ var args          = require('yargs').argv;
 var obfuscate     = require('gulp-obfuscate');
 var watch         = require('gulp-watch');
 
-var developmentTasks  = ['copy-src-to-build'];
+var developmentTasks  = ['copy-src-to-build', 'watch-src-folder'];
 var productionTasks   = ['copy-html', 'merge-js', 'merge-lib', 'merge-css'];
 
 gulp.task('default', ['inject-files-to-html']);
