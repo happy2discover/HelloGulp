@@ -7,8 +7,9 @@ var runSequence   = require('run-sequence');
 var del           = require('del');
 var args          = require('yargs').argv;
 var obfuscate     = require('gulp-obfuscate');
+var watch         = require('gulp-watch');
 
-var developmentTasks  = ['copy-html', 'copy-js', 'copy-lib', 'copy-css'];
+var developmentTasks  = ['copy-src-to-build'];
 var productionTasks   = ['copy-html', 'merge-js', 'merge-lib', 'merge-css'];
 
 gulp.task('build', function() {
@@ -51,6 +52,12 @@ gulp.task('copy-css', function () {
 
 gulp.task('copy-src-to-build', function() {
 	gulp.src('./src/**/*')
+		.pipe(gulp.dest('./build'));
+});
+
+gulp.task('watch-src-folder', function() {
+	gulp.src(['./src/*','./src/**/*'], {base: './src'})
+		.pipe(watch('src/**/*', {base: 'src'}))
 		.pipe(gulp.dest('./build'));
 });
 
