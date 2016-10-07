@@ -6,6 +6,7 @@ var cleanCSS      = require('gulp-clean-css');
 var runSequence   = require('run-sequence');
 var del           = require('del');
 var args          = require('yargs').argv;
+var obfuscate     = require('gulp-obfuscate');
 
 var developmentTasks  = ['copy-html', 'copy-js', 'copy-lib', 'copy-css'];
 var productionTasks   = ['copy-html', 'merge-js', 'merge-lib', 'merge-css'];
@@ -52,6 +53,7 @@ gulp.task('merge-js', function () {
   gulp.src(['./src/js/**/*.js'])
     .pipe(concat('app.min.js'))
     .pipe(uglify())
+    .pipe(obfuscate())
     .pipe(gulp.dest('./build/js'));
 });
 
@@ -59,6 +61,7 @@ gulp.task('merge-lib', function () {
   gulp.src(['./src/lib/**/*.js'])
     .pipe(concat('lib.min.js'))
     .pipe(uglify())
+    .pipe(obfuscate())
     .pipe(gulp.dest('./build/lib'));
 });
 

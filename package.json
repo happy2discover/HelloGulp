@@ -25,6 +25,7 @@
     "gulp-clean-css": "^2.0.13",
     "gulp-concat": "^2.6.0",
     "gulp-inject": "^4.1.0",
+    "gulp-obfuscate": "^0.2.9",
     "gulp-uglify": "^2.0.0",
     "run-sequence": "^1.2.2",
     "yargs": "^6.0.0"
