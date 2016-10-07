@@ -12,6 +12,16 @@ var watch         = require('gulp-watch');
 var developmentTasks  = ['copy-src-to-build'];
 var productionTasks   = ['copy-html', 'merge-js', 'merge-lib', 'merge-css'];
 
+gulp.task('default', ['inject-files-to-html']);
+
+gulp.task('inject-files-to-html', function () {
+  gulp.src('./src/index.html')
+  .pipe(inject(gulp.src('./src/css/**/*.css', {read: false}), {relative: true, starttag: '<!-- inject:app:{{ext}} -->'}))
+  .pipe(inject(gulp.src(['./src/*.js', './src/js/**/*.js'], {read: false}), {relative: true, starttag: '<!-- inject:app:{{ext}} -->'}))
+  .pipe(inject(gulp.src('./src/lib/**/*.js', {read: false}), {relative: true, starttag: '<!-- inject:lib:{{ext}} -->'}))
+  .pipe(gulp.dest('./src'));
+});
+
 gulp.task('build', function() {
   runSequence('clean', eval((args.env || "development") + "Tasks"));
 });
@@ -82,12 +92,4 @@ gulp.task('merge-css', function () {
     .pipe(concat('style.css'))
     .pipe(cleanCSS())
     .pipe(gulp.dest('./build/css'));
-});
-
-gulp.task('inject-files-to-html', function () {
-  gulp.src('./src/index.html')
-  .pipe(inject(gulp.src('./src/css/**/*.css', {read: false}), {relative: true, starttag: '<!-- inject:app:{{ext}} -->'}))
-  .pipe(inject(gulp.src(['./src/*.js', './src/js/**/*.js'], {read: false}), {relative: true, starttag: '<!-- inject:app:{{ext}} -->'}))
-  .pipe(inject(gulp.src('./src/lib/**/*.js', {read: false}), {relative: true, starttag: '<!-- inject:lib:{{ext}} -->'}))
-  .pipe(gulp.dest('./src'));
 });
