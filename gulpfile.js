@@ -73,9 +73,9 @@ gulp.task('merge-css', function () {
 });
 
 gulp.task('inject-files-to-html', function () {
-  gulp.src('./build/index.html')
-  .pipe(inject(gulp.src('./build/css/**/*.css', {read: false}), {relative: true, starttag: '<!-- inject:app:{{ext}} -->'}))
-  .pipe(inject(gulp.src(['./build/*.js', './build/js/**/*.js'], {read: false}), {relative: true, starttag: '<!-- inject:app:{{ext}} -->'}))
-  .pipe(inject(gulp.src('./build/lib/**/*.js', {read: false}), {relative: true, starttag: '<!-- inject:lib:{{ext}} -->'}))
-  .pipe(gulp.dest('./build'));
+  gulp.src('./src/index.html')
+  .pipe(inject(gulp.src('./src/css/**/*.css', {read: false}), {relative: true, starttag: '<!-- inject:app:{{ext}} -->'}))
+  .pipe(inject(gulp.src(['./src/*.js', './src/js/**/*.js'], {read: false}), {relative: true, starttag: '<!-- inject:app:{{ext}} -->'}))
+  .pipe(inject(gulp.src('./src/lib/**/*.js', {read: false}), {relative: true, starttag: '<!-- inject:lib:{{ext}} -->'}))
+  .pipe(gulp.dest('./src'));
 });
