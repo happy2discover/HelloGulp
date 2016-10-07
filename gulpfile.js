@@ -1,35 +1,30 @@
-var gulp = require('gulp');
+var gulp          = require('gulp');
+var inject        = require('gulp-inject');
+var concat        = require('gulp-concat');
+var uglify        = require('gulp-uglify');
+var cleanCSS      = require('gulp-clean-css');
+var runSequence   = require('run-sequence');
+var del           = require('del');
+var args          = require('yargs').argv;
 
-var inject = require('gulp-inject');
+var developmentTasks  = ['copy-html', 'copy-js', 'copy-lib', 'copy-css'];
+var productionTasks   = ['copy-html', 'merge-js', 'merge-lib', 'merge-css'];
 
-var concat = require('gulp-concat');
-
-var uglify = require('gulp-uglify');
-
-var cleanCSS = require('gulp-clean-css');
-
-var runSequence = require('run-sequence');
-
-var del = require('del');
-
-gulp.task('index', function () {
-  var target = gulp.src('./src/index.html');
-  // It's not necessary to read the files (will speed up things), we're only after their paths: 
-  var sources = gulp.src(['./src/js/**/*.js', './src/lib/**/*.js', './src/**/*.css'], {read: false});
- 
-  return target.pipe(inject(sources, {relative: true}))
-    .pipe(gulp.dest('./src'));
+gulp.task('build', function() {
+  runSequence('clean', eval((args.env || "development") + "Tasks"));
 });
 
-gulp.task('clean', function() {
+gulp.task('clean', function(callback) {
   del(['./build/**/*']).then(paths => {
     // console.log('deleted file(s) and forlder(s):');
     // if(0 === paths.length) {
     //   console.log('NONE!');
     // }
     // else {
-    //   console.log(paths.join('\n'));      
+    //   console.log(paths.join('\n'));
     // }
+
+    callback();
   });
 });
 
@@ -53,24 +48,18 @@ gulp.task('copy-css', function () {
     .pipe(gulp.dest('./build/css'));
 });
 
-var develeopTasks = ['clean', 'copy-html', 'copy-js', 'copy-lib', 'copy-css'];
-
-gulp.task('build', function() {
-  runSequence(develeopTasks)
-});
-
 gulp.task('merge-js', function () {
   gulp.src(['./src/js/**/*.js'])
-    .pipe(concat('app.js'))
+    .pipe(concat('app.min.js'))
     .pipe(uglify())
     .pipe(gulp.dest('./build/js'));
 });
 
 gulp.task('merge-lib', function () {
   gulp.src(['./src/lib/**/*.js'])
-    .pipe(concat('lib.js'))
+    .pipe(concat('lib.min.js'))
     .pipe(uglify())
-    .pipe(gulp.dest('./build/js'));
+    .pipe(gulp.dest('./build/lib'));
 });
 
 gulp.task('merge-css', function () {
@@ -81,11 +70,9 @@ gulp.task('merge-css', function () {
 });
 
 gulp.task('inject-files-to-html', function () {
-  var target = gulp.src('./build/index.html');
-  // It's not necessary to read the files (will speed up things), we're only after their paths: 
-  var sources = gulp.src(['./build/**/*.js', './build/**/*.css'], {read: false});
- 
-  return target.pipe(inject(sources, {relative: true}))
-    .pipe(gulp.dest('./build'));
+  gulp.src('./build/index.html')
+  .pipe(inject(gulp.src('./build/css/**/*.css', {read: false}), {relative: true, starttag: '<!-- inject:app:{{ext}} -->'}))
+  .pipe(inject(gulp.src(['./build/*.js', './build/js/**/*.js'], {read: false}), {relative: true, starttag: '<!-- inject:app:{{ext}} -->'}))
+  .pipe(inject(gulp.src('./build/lib/**/*.js', {read: false}), {relative: true, starttag: '<!-- inject:lib:{{ext}} -->'}))
+  .pipe(gulp.dest('./build'));
 });
- 
