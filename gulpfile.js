@@ -49,6 +49,11 @@ gulp.task('copy-css', function () {
     .pipe(gulp.dest('./build/css'));
 });
 
+gulp.task('copy-src-to-build', function() {
+	gulp.src('./src/**/*')
+		.pipe(gulp.dest('./build'));
+});
+
 gulp.task('merge-js', function () {
   gulp.src(['./src/js/**/*.js'])
     .pipe(concat('app.min.js'))
